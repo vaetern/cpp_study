@@ -1,4 +1,5 @@
 #include <string>
+#include <set>
 #include <iostream>
 #include <vector>
 #include <map>
@@ -6,6 +7,7 @@
 #include <cmath>
 #include <chrono>
 
+using namespace std;
 
 int internal_types() {
     int x = 5;
@@ -474,10 +476,9 @@ void benchmark_UpdateIfGreater() {
     std::cout << accumulatedTime / threshold << "ns mean" << std::endl;
 }
 
+void MoveStrings(std::vector<std::string> &source, std::vector<std::string> &destination) {
 
-void MoveStrings(std::vector<std::string>& source, std::vector<std::string>& destination) {
-
-    for(auto c:source){
+    for (auto c:source) {
         destination.insert(destination.end(), c);
     }
     source.clear();
@@ -491,13 +492,13 @@ void test_MoveStrings() {
     };
 
     std::map<int, std::vector<std::string>> source = {
-            {0, {"a0","b0","c0",}},
+            {0, {"a0", "b0", "c0",}},
             {1, {"old"}}
     };
 
     std::map<int, std::vector<std::string>> expected = {
-            {0, {"z0","a0","b0","c0",}},
-            {1, {"new","old"}}
+            {0, {"z0",  "a0", "b0", "c0",}},
+            {1, {"new", "old"}}
     };
 
     for (auto test_case:expected) {
@@ -506,15 +507,481 @@ void test_MoveStrings() {
         auto source_vector = source[index];
         auto destination_vector = destination[index];
         MoveStrings(source_vector, destination_vector);
-        if (destination_vector == expected[index] && source_vector.size() == 0 ) {
+        if (destination_vector == expected[index] && source_vector.size() == 0) {
             std::cout << "passed: " << expected[index][0] << " == " << destination_vector[0] << std::endl;
         } else {
-            std::cout << "failed: size " << source_vector.size() << ", got "<< destination_vector[0] << " expecting "
-            << expected[index][0] << std::endl;
+            std::cout << "failed: size " << source_vector.size() << ", got " << destination_vector[0] << " expecting "
+                      << expected[index][0] << std::endl;
         }
     }
 }
 
+void Reverse(std::vector<int> &a) {
+    std::vector<int> b;
+
+    for (const auto &el: a) {
+        b.insert(b.begin(), el);
+    }
+
+    a = b;
+}
+
+void test_Reverse() {
+    std::map<std::vector<int>, std::vector<int>> test_map = {
+            {{1, 2, 3},       {3, 2, 1}},
+            {{1, 0, 0, 1, 0}, {0, 1, 0, 0, 1}},
+    };
+
+    for (const auto&[key, value]: test_map) {
+        std::vector<int> expected = value;
+        std::vector<int> actual = key;
+        Reverse(actual);
+        if (expected == actual) {
+            std::cout << "passed:" << std::endl;
+        } else {
+            std::cout << "failed:" << std::endl;
+        }
+    }
+}
+
+void benchmark_Reverse() {
+
+    int threshold = 1000;
+    int accumulatedTime = 0;
+    std::vector<int> initial_a(1000, 9);
+    for (int i = 0; i < threshold; i++) {
+        auto start = std::chrono::steady_clock::now();
+        ///---------- bench
+        std::vector<int> a = initial_a;
+        Reverse(a);
+        ///--end
+        auto finish = std::chrono::steady_clock::now();
+        accumulatedTime += std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count();
+    }
+
+
+    std::cout << threshold << " iterations" << std::endl;
+    std::cout << accumulatedTime / threshold << " micros mean" << std::endl;
+}
+
+// -- more about vectora
+
+void vector_for_reference() {
+    std::vector<std::string> v(10, "a");
+    for (std::string &s:v) {
+        s = "u";
+    }
+
+    std::cout << v[0];
+}
+
+void more_vector_functions() {
+    vector<int> v(10, 1);
+    cout << v.size() << endl;
+
+    v.clear();
+    cout << v.size() << endl;
+
+    v.assign(5, 0);
+    cout << v.size() << endl;
+
+    v.push_back(0);
+    cout << v.size() << endl;
+
+    v.resize(1);
+    cout << v.size() << endl;
+}
+
+vector<int> AboveMeanTemperature(const vector<int> temperatures) {
+
+    int sum = 0;
+    for (auto t:temperatures) {
+        sum += t;
+    }
+    double mean = sum / temperatures.size();
+
+    vector<int> above_average;
+
+    for (auto t:temperatures) {
+        if (t > mean) {
+            above_average.push_back(t);
+        }
+    }
+    return above_average;
+}
+
+void PrintVector(vector<int> v) {
+    for (auto i:v) {
+        cout << i << ", ";
+    }
+    cout << endl;
+}
+
+void test_AboveMeanTemperature() {
+    auto res = AboveMeanTemperature({10, 5, 6, 7, 8, 3, 2, 1, 6, 5, 7, 8, 9, 0, 7, 6, 5, -6});
+
+    PrintVector(res);
+}
+
+struct WQueue {
+    map<int, int> queue;
+    int pointer;
+
+    WQueue() : pointer(0) {}
+
+    void addToQueue(int count) {
+        for (int i = 0; i < count; ++i) {
+            queue[pointer + i] = 0;
+        }
+        pointer += count;
+    }
+
+    void removeFromQueue(int count) {
+        count *= -1;
+        for (int i = pointer; i > pointer - count; --i) {
+            queue.erase(pointer - i);
+        }
+        pointer -= count;
+    }
+
+    void setWorried(int offset) {
+        queue[offset - 1] = 1;
+    }
+
+    int howManyWorried() {
+        int worried_count = 0;
+        for (auto q:this->queue) {
+            if (q.second == 1) {
+                worried_count++;
+            }
+        }
+        return worried_count;
+    }
+
+    void print() {
+        for (auto q:this->queue) {
+            cout << q.second << " ";
+        }
+        cout << endl;
+    }
+
+};
+
+void WorryQueue() {
+
+    WQueue worry_queue;
+
+    string command_word;
+    int command_digit;
+    while (true) {
+        cout << ":";
+        cin >> command_word >> command_digit;
+        if (command_word == "worry") {
+            worry_queue.setWorried(command_digit);
+            worry_queue.print();
+
+            command_word = "";
+            command_digit = 0;
+            continue;
+        }
+
+        if (command_word == "come") {
+            if (command_digit > 0) {
+                worry_queue.addToQueue(command_digit);
+            } else {
+                worry_queue.removeFromQueue(command_digit);
+            }
+            worry_queue.print();
+
+            command_word = "";
+            command_digit = 0;
+            continue;
+        }
+
+        if (command_word == "worry_count") {
+            int count_worried = worry_queue.howManyWorried();
+            cout << count_worried;
+
+            command_word = "";
+            command_digit = 0;
+            continue;
+        }
+
+        if (command_word == "exit") {
+            break;
+        } else {
+            continue;
+        }
+    }
+
+}
+
+map<char, int> WordMap(string &word) {
+    map<char, int> word_map;
+
+    for (const char &ch:word) {
+        word_map[ch]++;
+    }
+    return word_map;
+}
+
+bool IsAnagram(string s1, string s2) {
+    return WordMap(s1) == WordMap(s2);
+}
+
+void test_IsAnagram() {
+
+    map<map<string, string>, bool> test_map = {
+            {{{"anna",      "nana"}},     true},
+            {{{"anapurna",  "nanapura"}}, true},
+            {{{"anapurnad", "nanapuda"}}, false},
+    };
+
+    for (const auto&[pair, expected]: test_map) {
+        for (const auto&[w1, w2]:pair) {
+            if (IsAnagram(w1, w2) == expected) {
+                cout << "passed" << endl;
+            } else {
+                cout << "failed: " << w1 << " " << w2 << endl;
+            }
+        }
+    }
+}
+
+
+void PrintBuses(const map<int, vector<string>> &buses) {
+    for (const auto&[bus, stops]: buses) {
+        cout << "#" << bus << ": ";
+        for (auto &s: stops) {
+            cout << s << ", ";
+        }
+        cout << endl;
+    }
+}
+
+/*
+ * NEW_BUS 30 5 14Line 11Line 7Line Dzerelo Park
+ * NEW_BUS 12 5 14Line 11Line 7Line Park Plosha
+ * NEW_BUS 719 5 7Line 1Line Horodskaya Ashan Nivky
+ * BUSES_FOR_STOP 14Line
+ * BUSES_FOR_STOP 7Line
+ * STOPS_FOR_BUS 12
+ * */
+void BusStops() {
+
+    map<int, vector<string>> buses;
+
+    string command = "";
+    while (true) {
+        cin >> command;
+        if (command == "NEW_BUS") {
+            string value;
+            int bus, stops_count = 0;
+            cin >> bus;
+            buses[bus] = {};
+            cin >> stops_count;
+            for (int i = 0; i < stops_count; i++) {
+                cin >> value;
+                buses[bus].push_back(value);
+            }
+
+            PrintBuses(buses);
+            command = "";
+            continue;
+        }
+
+        if (command == "BUSES_FOR_STOP") {
+            string value;
+            cin >> value;
+            for (const auto&[bus, stops]: buses) {
+                if (std::find(stops.begin(), stops.end(), value) != stops.end()) {
+                    cout << bus << ", ";
+                }
+                cout << endl;
+            }
+            cout << endl;
+            command = "";
+            continue;
+        }
+
+        if (command == "STOPS_FOR_BUS") {
+            int value;
+            cin >> value;
+            for (const auto &stop_given_bus: buses[value]) {
+                cout << "(" << stop_given_bus << ") ";
+                for (const auto&[bus_inner, stops_inner]: buses) {
+                    if (std::find(stops_inner.begin(), stops_inner.end(), stop_given_bus) != stops_inner.end()) {
+                        cout << "#" << bus_inner << ", ";
+                    }
+                }
+                cout << endl;
+            }
+            cout << endl;
+            command = "";
+            continue;
+        }
+
+        if (command == "exit") {
+            break;
+        } else {
+            command = "";
+            continue;
+        }
+    }
+
+
+}
+
+void PrintSet(const set<string> &print_set) {
+
+    for (const auto &p: print_set) {
+        cout << p << ",";
+    }
+    cout << endl;
+
+}
+
+// -- sets
+void SetsUsage() {
+    set<string> famous_person;
+
+    famous_person.insert("Jon Bonjovi");
+    famous_person.insert("Bern Stroustrup");
+    famous_person.insert("Yuri Gagarin");
+    famous_person.insert("Me");
+    famous_person.erase("Me");
+    PrintSet(famous_person);
+
+    cout << famous_person.count("Yuri Gagarin") << endl;
+
+    vector<string> v = {"a", "b", "c", "a", "Q", "F"};
+    set<string> s(v.begin(), v.end());
+
+    PrintSet(s);
+
+}
+
+//10 wheels modern everyday albedo wheels modern everyday albedo omen sign
+void CountUniqueStrings() {
+
+    int command;
+    set<string> unique_words;
+    cin >> command;
+    string in;
+    for (int i = 0; i < command; ++i) {
+        cin >> in;
+        unique_words.insert(in);
+    }
+
+    cout << unique_words.size();
+    cout << endl;
+
+}
+
+
+struct Content {
+    map<int, string> content;
+    int pointer;
+
+    Content() : pointer(0) {}
+
+    void add(string s) {
+        if (indexOf(s) == -1) {
+            content[pointer + 1] = s;
+            pointer++;
+        }
+    }
+
+    string getByIndex(int index) {
+        return content[index];
+    }
+
+    int indexOf(string s) {
+        for (const auto&[k, v]:content) {
+            if (v == s) {
+                return k;
+            }
+        }
+        return -1;
+    }
+
+};
+
+void PrintSynonyms(Content& content, const set<vector<int>>& many_to_many){
+    for(const auto& entry: many_to_many ){
+        string entry1, entry2;
+        entry1 = content.getByIndex(entry[0]);
+        entry2 = content.getByIndex(entry[1]);
+        cout << entry1 << " = " << entry2 << endl;
+    }
+}
+
+/*
+ADD agility foxiness
+ADD leannes agility
+ADD dexterity agility
+ADD evil morbid
+ADD vile evil
+CHECK agility
+CHECK vile
+CHECK agility dexterity
+ */
+void Synonyms() {
+
+    Content content;
+    set<vector<int>> many_to_many;
+
+    string command;
+
+    while (true) {
+        cin >> command;
+
+        if (command == "ADD") {
+            string word1, word2;
+            cin >> word1 >> word2;
+            content.add(word1);
+            content.add(word2);
+            int index1, index2;
+            index1 = content.indexOf(word1);
+            index2 = content.indexOf(word2);
+
+            many_to_many.insert({index1, index2});
+            many_to_many.insert({index2, index1});
+
+            PrintSynonyms(content, many_to_many);
+            command = "";
+            continue;
+        }
+
+        if (command == "CHECK") {
+            string word_to_check;
+            cin >> word_to_check;
+            int index_of_word;
+            index_of_word = content.indexOf(word_to_check);
+
+            for(const auto& rel:many_to_many){
+                if(rel[0] == index_of_word){
+                    cout << content.getByIndex(rel[1]) << ", ";
+                }
+            }
+            cout << endl;
+
+            command = "";
+            continue;
+        }
+
+        if (command == "exit") {
+            break;
+        } else {
+            command = "";
+            continue;
+        }
+    }
+}
+
+void Algorithms(){
+
+}
 
 int main() {
 //    int a = internal_types();
@@ -541,10 +1008,20 @@ int main() {
 //    howToBehchmark();
 //    ConstReference();
 //    benchmark_UpdateIfGreater();
-    test_MoveStrings();
-
-
+//    test_MoveStrings();
+//    test_Reverse();
+//    benchmark_Reverse();
+//    vector_for_reference();
+//    more_vector_functions();
+//    test_AboveMeanTemperature();
+//    WorryQueue();
+//    test_IsAnagram();
+//    BusStops();
+//    SetsUsage();
+//    CountUniqueStrings();
+    Synonyms();
     return 0;
+
 
 }
 
