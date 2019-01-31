@@ -12,6 +12,9 @@
 #include "resources/ReversibleString.h"
 #include "resources/ImageWeighted.h"
 #include "resources/FileStreamEx.h"
+#include "resources/OverloadOperator.h"
+#include "resources/AvgTemperature2.h"
+#include "resources/BlockMass.h"
 
 
 using namespace std;
@@ -145,7 +148,7 @@ void UseReversableString() {
     cout << s.ToString() << endl;
 
     s.Reverse();
-    const ReversibleString& s_ref = s;
+    const ReversibleString &s_ref = s;
     string tmp = s_ref.ToString();
     cout << tmp << endl;
 
@@ -153,7 +156,7 @@ void UseReversableString() {
     cout << '"' << empty.ToString() << '"' << endl;
 }
 
-void UseImageWeighted(){
+void UseImageWeighted() {
     Image image = {10, 2, 6};
     Params params = {4, 2, 6};
     cout << ComputeImageWeight(params, image) << endl;
@@ -161,24 +164,24 @@ void UseImageWeighted(){
 //    cout << ComputeQualityByWeight(params, image, 52) << endl;
 }
 
-void UseFileStream(){
+void UseFileStream() {
     FileReaderCsv filestream = FileReaderCsv("input.csv");
     cout << filestream.GetDashed() << endl;
     filestream.CoutGlued();
 }
 
-void USeWriteToFstream(){
-        FileWriterCsv filestream = FileWriterCsv("output.csv");
+void USeWriteToFstream() {
+    FileWriterCsv filestream = FileWriterCsv("output.csv");
 
-        vector<string> line1 = {"1","KBP","Kyiv Boryspil",};
-        vector<string> line2 = {"2","NCE","Nice",};
+    vector<string> line1 = {"1", "KBP", "Kyiv Boryspil",};
+    vector<string> line2 = {"2", "NCE", "Nice",};
 
     filestream.AddAsCsvLine(line1);
     filestream.AddAsCsvLine(line2);
 }
 
-void UseWriteToTable(){
-    vector<string> columns = {"A1","X1","Y2"};
+void UseWriteToTable() {
+    vector<string> columns = {"A1", "X1", "Y2"};
     FileWriterTable filestream = FileWriterTable("table.txt", columns);
 
     vector<double> line1 = {.01, 12, 16};
@@ -188,6 +191,85 @@ void UseWriteToTable(){
     filestream.AddTr(line2);
 }
 
+void UseOverloadOperator() {
+    stringstream duration_str_stream("1 20 40"); //create stringstream, not to use cin;
+    Interval duration;
+
+    duration_str_stream >> duration;
+    cout << duration << endl;
+
+    Interval interval_a = {2, 40, 40};
+    Interval interval_b = {1, 25, 50};
+
+    cout << interval_a << endl;
+    cout << interval_b << endl;
+    cout << "sum: " << interval_a + interval_b << endl;
+
+    vector<Interval> v = {interval_a, interval_b, interval_a + interval_b};
+    cout << "before sort:" << endl;
+    for (auto i:v) {
+        cout << i << "  ";
+    }
+    cout << endl;
+    cout << "after sort:" << endl;
+    sort(v.begin(), v.end());
+    for (auto i:v) {
+        cout << i << "  ";
+    }
+
+    cout << (-1 < 1u) << endl;
+}
+
+void HowToUseConstants() {
+    const int REQUEST_ADD = 0;
+    const int REQUEST_REMOVE = 1;
+    const int REQUEST_NEGATE = 2;
+    int a = 1;
+    if (a == REQUEST_REMOVE) {
+        cout << "Remove request" << endl;
+    }
+}
+
+
+// --- Enum type
+enum class RequestType {
+    ADD = 1,
+    REMOVE,
+    NEGATE,
+    OTHER
+};
+
+void ProcessRequestType(RequestType type) {
+
+    switch(type){
+        case RequestType::ADD:
+            cout << "ADD" <<endl;
+            break;
+        case RequestType::REMOVE:
+            cout << "REMOVE" << endl;
+            break;
+        case RequestType::NEGATE:
+            cout << "NEGATE" << endl;
+            break;
+        default:
+            cout << "Unknown <type>: " << static_cast<int>(type) << endl;
+            break;
+    }
+
+}
+
+void EnumerationExample() {
+    RequestType request_type =  static_cast<RequestType>(1);
+
+    ProcessRequestType(request_type);
+    ProcessRequestType(RequestType::REMOVE);
+    ProcessRequestType(RequestType::OTHER);
+
+
+}
+
+// ---
+
 int main() {
 
 //    UsePersonClassHistory();
@@ -195,10 +277,20 @@ int main() {
 //    UseImageWeighted();
 //    UseFileStream();
 //    USeWriteToFstream();
+//    UseWriteToTable();
+//    UseOverloadOperator();
+//    HowToUseConstants();
+//    EnumerationExample();
+    // 7
+    // -10 -8.92 4 11.3434 12.34 2.0001 .5967
+//    RunAvgTemperature2();
 
-    UseWriteToTable();
-
-
+    // 4 11
+    // 1 2 3
+    // 1 2 6
+    // 2 4 8
+    // 16 12 12
+    RunMassCalculator();
     return 0;
 }
 
