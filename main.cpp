@@ -6,19 +6,23 @@
 #include <algorithm>
 #include <cmath>
 #include <chrono>
-#include "resources/SortedStrings.h"
+#include <tuple>
+//#include "resources/SortedStrings.h"
 //#include "resources/library_1.h"
-#include "resources/Person.h"
-#include "resources/ReversibleString.h"
-#include "resources/ImageWeighted.h"
-#include "resources/FileStreamEx.h"
-#include "resources/OverloadOperator.h"
-#include "resources/AvgTemperature2.h"
-#include "resources/BlockMass.h"
+//#include "resources/Person.h"
+//#include "resources/ReversibleString.h"
+//#include "resources/ImageWeighted.h"
+//#include "resources/FileStreamEx.h"
+//#include "resources/OverloadOperator.h"
+//#include "resources/AvgTemperature2.h"
+//#include "resources/BlockMass.h"
+#include "resources/FunctionsTemplate.h"
+#include "resources/FunctionsTemplateTask.h"
 
 
 using namespace std;
 
+/*
 
 void PrintSortedStrings(SortedStrings &strings) {
     for (const string &s : strings.GetSortedStrings()) {
@@ -46,10 +50,12 @@ void UseSortedStrings() {
 //    cin_cout();
 //    cond_cycles();
 //    lexic_less();
+*/
 /*    quadratic_equation(2, 5, 2);
     quadratic_equation(2, 4, 2);
     quadratic_equation(2, 1, 2);
-    quadratic_equation(0, 4, 10);*/
+    quadratic_equation(0, 4, 10);*//*
+
 //    iterate_map();
 //    for_i();
 //    test_division();
@@ -269,6 +275,96 @@ void EnumerationExample() {
 }
 
 // ---
+*/
+
+
+/*
+void TupleUsage() {
+
+    string my_str = "My string";
+    uint8_t my_int = 42;
+    bool my_bool = true;
+
+    tuple<string&, uint8_t&, bool&> tuple_a = tie(my_str,my_int,my_bool);
+
+    auto tuple_b = tie(my_str,my_int,my_bool);
+
+    auto tuple_c = make_tuple(.1 , 2, "strings");
+
+    tuple tuple_d("D", pow(2,8), 0);
+
+    cout << get<0>(tuple_c) << endl;
+    cout << get<2>(tuple_b) << endl;
+    cout << get<0>(tuple_a) << endl;
+    cout << get<1>(tuple_d) << endl;
+}
+*/
+/*
+
+void UseFunctionsTemplate() {
+    cout << Squared(8) << endl;
+    cout << Squared(.8) << endl;
+    cout << Squared(1.2) << endl;
+
+    auto pair_1 = make_pair(2, 4);
+    auto squared_pair = Squared(pair_1);
+    cout << squared_pair.first << ", " << squared_pair.second << endl;
+
+    vector<int> vec = {1, 2, 3, 4};
+    vector<string> strings = {"O", "1u", "element"};
+
+    cout << vec << endl;
+    cout << strings << endl;
+
+    map<int, string> my_map = {{1, "first"},
+                               {2, "second"}};
+    cout << my_map << endl;
+
+    cout << MaxOf<double>(4, 5.1) << endl;
+    cout << max<double>(4, 5.1) << endl;
+
+
+}
+*/
+
+void UseFunctionTemplateTask() {
+
+    vector<double> vec = {2, 4.2, 5};
+    map<string, int> m = {{"one", 3},
+                          {"two", 5}};
+
+    pair<int ,int> p = {2, 4};
+
+    map<vector<int>, pair<int, double>> composite = {
+            {
+                    {2,3,4}, {2, .5}
+            },
+            {
+                {1,2,0}, {4, 1.5}
+            }
+    };
+
+    cout << vec << endl;
+    cout << SquaredContainer(vec) << endl;
+
+    cout << m << endl;
+    cout << SquaredContainer(m) << endl;
+
+    cout << p << endl;
+    cout << SquaredContainer(p) << endl;
+
+
+    cout << composite << endl;
+    cout << SquaredContainer(composite) << endl;
+
+
+    map<int, string> map_search = {{0, "value"}};
+    string& item = GetRefStrict(map_search, 0);
+    item = "newvalue";
+    cout << map_search[0] << endl; // выведет newvalue
+
+}
+
 
 int main() {
 
@@ -281,16 +377,14 @@ int main() {
 //    UseOverloadOperator();
 //    HowToUseConstants();
 //    EnumerationExample();
-    // 7
-    // -10 -8.92 4 11.3434 12.34 2.0001 .5967
 //    RunAvgTemperature2();
+//    RunMassCalculator();
+//    TupleUsage();
+//    UseFunctionsTemplate();
 
-    // 4 11
-    // 1 2 3
-    // 1 2 6
-    // 2 4 8
-    // 16 12 12
-    RunMassCalculator();
+    UseFunctionTemplateTask();
+
+
     return 0;
 }
 
