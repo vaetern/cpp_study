@@ -1,12 +1,12 @@
 #include <string>
-#include <set>
+//#include <set>
 #include <iostream>
 #include <vector>
-#include <map>
+//#include <map>
 #include <algorithm>
-#include <cmath>
-#include <chrono>
-#include <tuple>
+//#include <cmath>
+//#include <chrono>
+//#include <tuple>
 //#include "resources/SortedStrings.h"
 //#include "resources/library_1.h"
 //#include "resources/Person.h"
@@ -16,8 +16,11 @@
 //#include "resources/OverloadOperator.h"
 //#include "resources/AvgTemperature2.h"
 //#include "resources/BlockMass.h"
-#include "resources/FunctionsTemplate.h"
-#include "resources/FunctionsTemplateTask.h"
+//#include "resources/FunctionsTemplateTask.h"
+//#include "resources/UnitTest.h"
+//#include "resources/UsingIterators_test.h"
+#include "resources/StringSplit_test.h"
+#include "resources/Benchmark.h"
 
 
 using namespace std;
@@ -326,7 +329,7 @@ void UseFunctionsTemplate() {
 
 }
 */
-
+/*
 void UseFunctionTemplateTask() {
 
     vector<double> vec = {2, 4.2, 5};
@@ -363,8 +366,67 @@ void UseFunctionTemplateTask() {
     item = "newvalue";
     cout << map_search[0] << endl; // выведет newvalue
 
+}*/
+/*
+
+void UnitTestInts() {
+    AssertEqual(1, 1, "1 == 1");
+    AssertEqual(3, 3, "2 == 3");
 }
 
+void UnitTestStrings() {
+    AssertNotEqual("abc", "absc", "abc string");
+    AssertNotEqual("ccc", "ccc", "ccc string");
+}
+
+void UnitTestVecs() {
+    AssertNotEqual(vector<int>{1,2,3}, vector<int>{1,2,3}, "vector1");
+    AssertNotEqual(vector<int>{1,2,4}, vector<int>{1,2,3}, "vector2");
+}
+
+void UseUnitTests() {
+    TestRunner tr;
+    tr.RunTest(UnitTestInts, "Ints");
+    tr.RunTest(UnitTestStrings, "Strs");
+    tr.RunTest(UnitTestVecs, "Vectors");
+}
+*/
+/*
+void UseIteratorForContainer(){
+    std::vector<std::string> v = {"a", "b", "c", "d", "e"};
+    PrintContainerByIterators(begin(v), end(v));
+    cout << endl;
+
+    string st = "My string";
+    PrintContainerByIterators(begin(st), end(st));
+    cout << endl;
+
+    auto border = find(begin(v), end(v), "c");
+    PrintContainerByIterators(begin(v),border);
+    cout << endl;
+    PrintContainerByIterators(border, end(v));
+
+
+}*/
+
+
+void StringSplit_subject(){
+    auto split = StringSplit();
+    auto actual = split.Split("Founded by Suroosh Alvi, Gavin McInnes and Shane Smith,[3] the magazine was launched in 1994 as the Voice of Montreal with government funding, and the intention of the founders was to provide work and a community service.[4] When the editors later sought to dissolve their commitments with the original publisher Alix Laurent, they bought him out and changed the name to Vice in 1996.[5]\n"
+                              "\n"
+                              "Richard Szalwinski, a Canadian software millionaire, acquired the magazine and relocated the operation to New York City in the late 1990s. Following the relocation, the magazine quickly developed a reputation for provocative and politically incorrect content. Under Szalwinski's ownership, a few retail stores were opened in New York City and customers could purchase fashion items that were advertised in the magazine. However, due to the end of the dot-com bubble, the three founders eventually regained ownership of the Vice brand, followed by the closure of the stores.[3]\n"
+                              "\n"
+                              "The British edition of Vice was launched in 2002 and Andy Capper was its first editor. Capper explained in an interview shortly after the UK debut that the publication's remit was to cover \"the things we're meant to be ashamed of\", and articles were published on topics such as bukkake and bodily functions.[6]\n"
+                              "\n"
+                              "By the end of 2007, 13 foreign editions of Vice magazine were published, the Vice independent record label was functional, and the online video channel VBS.com had 184,000 unique viewers from the U.S. during the month of August. The media company was still based in New York City, but the magazine began featuring articles on topics that were considered more serious, such as armed conflict in Iraq, than previous content. Alvi explained to The New York Times in November 2007: \"The world is much bigger than the Lower East Side and the East Village.\"[3] ", ' ');
+}
+
+void StringSplit_benchmark(){
+    Benchmark bm;
+    bm.DoBenchmark(StringSplit_subject, 100, "StringSplit_benchmark");
+
+
+}
 
 int main() {
 
@@ -381,9 +443,11 @@ int main() {
 //    RunMassCalculator();
 //    TupleUsage();
 //    UseFunctionsTemplate();
-
-    UseFunctionTemplateTask();
-
+//    UseFunctionTemplateTask();
+//    UseUnitTests();
+//    UsingIterators_test();
+//    StringSplit_test();
+    StringSplit_benchmark();
 
     return 0;
 }

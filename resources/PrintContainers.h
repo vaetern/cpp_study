@@ -1,3 +1,4 @@
+#pragma once
 #ifndef UNTITLED_FUNCTIONSTEMPLATE_H
 #define UNTITLED_FUNCTIONSTEMPLATE_H
 
@@ -5,6 +6,8 @@
 #include <utility>
 #include <ostream>
 #include <sstream>
+#include <vector>
+#include <map>
 
 using namespace std;
 
