@@ -19,8 +19,10 @@
 //#include "resources/FunctionsTemplateTask.h"
 //#include "resources/UnitTest.h"
 //#include "resources/UsingIterators_test.h"
-#include "resources/StringSplit_test.h"
-#include "resources/Benchmark.h"
+//#include "resources/StringSplit_test.h"
+//#include "resources/Benchmark.h"
+//#include "resources/RemoveDuplicates_test.h"
+#include "resources/FindNearestElement_test.h"
 
 
 using namespace std;
@@ -409,6 +411,7 @@ void UseIteratorForContainer(){
 
 }*/
 
+/*
 
 void StringSplit_subject(){
     auto split = StringSplit();
@@ -427,6 +430,7 @@ void StringSplit_benchmark(){
 
 
 }
+*/
 
 int main() {
 
@@ -447,8 +451,9 @@ int main() {
 //    UseUnitTests();
 //    UsingIterators_test();
 //    StringSplit_test();
-    StringSplit_benchmark();
-
+//    StringSplit_benchmark();
+//    RunTests_RemoveDuplicates();
+      FindNearestElement_test();
     return 0;
 }
 
