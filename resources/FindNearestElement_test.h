@@ -18,12 +18,14 @@ void FindNearestElement_suite1() {
             {6, {{1, 4, 6}, 6}},
             {6, {{1, 4, 6}, 100}},
     };
+
+
 }
 
 void FindNearestElement_suite2() {
     set<int> empty_set;
     if(FindNearestElement(empty_set, 8) != end(empty_set)){
-        AssertEqual(0,1, "empty set case");
+        ASSERT_EQUAL(0,1);
     }
 }
 

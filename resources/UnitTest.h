@@ -11,6 +11,14 @@
 
 using namespace std;
 
+#define ASSERT_EQUAL(x, y){             \
+    ostringstream os;                   \
+    os << __FILE__ <<":"<<__LINE__;     \
+    AssertEqual(x ,y, os.str());        \
+}
+
+#define RUN_TEST(tr, func) \
+  tr.RunTest(func, #func)
 
 template<class T, class U>
 void AssertEqual(const T &expected, const U &actual, const string &hint) {

@@ -4,6 +4,7 @@
 #include <vector>
 //#include <map>
 #include <algorithm>
+#include <memory>
 //#include <cmath>
 //#include <chrono>
 //#include <tuple>
@@ -22,7 +23,10 @@
 //#include "resources/StringSplit_test.h"
 //#include "resources/Benchmark.h"
 //#include "resources/RemoveDuplicates_test.h"
-#include "resources/FindNearestElement_test.h"
+//#include "resources/FindNearestElement_test.h"
+//#include "resources/InheritanceUsage.h"
+#include "course3/TableSheet.h"
+#include "resources/UnitTest.h"
 
 
 using namespace std;
@@ -431,6 +435,20 @@ void StringSplit_benchmark(){
 
 }
 */
+/*
+void TestTable() {
+    TableSheet<int> t(1, 1);
+    ASSERT_EQUAL(t.Size().first, 1u);
+    ASSERT_EQUAL(t.Size().second, 1u);
+    t[0][0] = 42;
+    ASSERT_EQUAL(t[0][0], 42);
+    t.Resize(3, 4);
+    ASSERT_EQUAL(t.Size().first, 3u);
+    ASSERT_EQUAL(t.Size().second, 4u);
+}*/
+
+
+
 
 int main() {
 
@@ -453,7 +471,11 @@ int main() {
 //    StringSplit_test();
 //    StringSplit_benchmark();
 //    RunTests_RemoveDuplicates();
-      FindNearestElement_test();
+//    FindNearestElement_test();
+//    InheritanceUsage();
+    TestRunner tr;
+    RUN_TEST(tr, TestTable);
+
     return 0;
 }
 

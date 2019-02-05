@@ -1,4 +1,7 @@
 #include "UnitTest.h"
+#include <sstream>
+using namespace std;
+
 
 TestRunner::TestRunner() {
     cerr << "TestRunner init..." << endl;
