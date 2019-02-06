@@ -25,8 +25,10 @@
 //#include "resources/RemoveDuplicates_test.h"
 //#include "resources/FindNearestElement_test.h"
 //#include "resources/InheritanceUsage.h"
-#include "course3/TableSheet.h"
+//#include "course3/TableSheet.h"
 #include "resources/UnitTest.h"
+#include "resources/LogDuration.h"
+#include "course3/Student.h"
 
 
 using namespace std;
@@ -447,6 +449,31 @@ void TestTable() {
     ASSERT_EQUAL(t.Size().second, 4u);
 }*/
 
+void OptimizeStudent(){
+    srand( time(0) );
+    auto v1 = rand() % 100;
+    vector<Student> students;
+    {
+    LOG_DURATION("students generation")
+    for(int i = 0; i < 100'000; ++i){
+        auto v1 = (double) (rand() % 100);
+        students.push_back({"a", "b", map<string, double>{}, v1 });
+    }}
+
+//    {
+//        LOG_DURATION("students sort ad hoc")
+//        sort(begin(students), end(students));
+//    }
+
+    {
+        LOG_DURATION("students compare sort")
+        sort(begin(students), end(students), [](Student first, Student second){ return Compare(first, second);});
+    }
+
+    cout <<students.size();
+
+}
+
 
 
 
@@ -473,9 +500,8 @@ int main() {
 //    RunTests_RemoveDuplicates();
 //    FindNearestElement_test();
 //    InheritanceUsage();
-    TestRunner tr;
-    RUN_TEST(tr, TestTable);
 
+    OptimizeStudent();
     return 0;
 }
 
